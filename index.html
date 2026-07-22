@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Nuestro Universo ❤️ — Para Scarleth Rassel</title>
+<meta name="description" content="Un universo digital hecho para Scarleth Rassel.">
+
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#ff2d75">
+<link rel="icon" href="icono.png">
+<link rel="apple-touch-icon" href="icono.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ CAPA DE FONDO (siempre visible) ============ -->
+<div id="fondo-universo" aria-hidden="true">
+  <div id="aurora"></div>
+  <div id="nebulosas"></div>
+  <div id="stars"></div>
+  <canvas id="constelacion-canvas"></canvas>
+  <div id="shooting-stars"></div>
+  <div id="galaxia-suave"></div>
+</div>
+
+<div id="petals-container" aria-hidden="true"></div>
+<canvas id="fireworks" aria-hidden="true"></canvas>
+<div id="hearts-layer" aria-hidden="true"></div>
+
+<button id="moon" title="Hay algo escondido aquí..." aria-label="Luna secreta">
+  <span class="moon-glow"></span>
+  <span class="moon-crater c1"></span>
+  <span class="moon-crater c2"></span>
+  <span class="moon-crater c3"></span>
+</button>
+
+<audio id="audio-player" preload="metadata"></audio>
+
+<!-- ============ PANTALLA 1 · BIENVENIDA ============ -->
+<section id="welcome">
+  <p class="eyebrow">un universo con un solo habitante fijo</p>
+  <h1>Nuestro Universo <span class="heart-ico">❤️</span></h1>
+  <h2>Para <strong>Scarleth Rassel</strong></h2>
+  <p class="subtitulo">Todo lo que somos, cabe aquí dentro.</p>
+  <button id="enter" class="btn-primario">
+    <span>Entrar al Universo</span>
+  </button>
+</section>
+
+<!-- ============ PANTALLA 2 · PRINCIPAL ============ -->
+<main id="main" hidden>
+
+  <header class="app-header">
+    <button id="toggle-modo" class="icon-btn" title="Cambiar de cielo" aria-label="Cambiar modo día o noche">
+      <span id="icono-modo">🌙</span>
+    </button>
+    <h1>Nuestro Universo <span class="heart-ico">❤️</span></h1>
+    <h3 id="frase-romantica" aria-live="polite"></h3>
+    <p id="racha-badge" class="racha-badge" hidden></p>
+  </header>
+
+  <section class="card card-tiempo">
+    <span class="card-eyebrow">Desde el 11 de marzo</span>
+    <h2>Tiempo juntos</h2>
+    <div id="contador" class="contador-grid"></div>
+  </section>
+
+  <section class="card card-fechas">
+    <span class="card-eyebrow">Lo que se viene</span>
+    <h2>Fechas especiales</h2>
+    <div id="fechas-especiales-lista" class="fechas-especiales-lista"></div>
+  </section>
+
+  <section class="card card-amor">
+    <span class="card-eyebrow">Toca cuando quieras</span>
+    <h2>Medidor de Amor</h2>
+    <button id="loveButton" class="boton-amor" aria-label="Sumar amor">
+      <span>❤️</span>
+    </button>
+    <div id="loveCounter">0</div>
+    <div id="level"></div>
+    <div class="barra-nivel">
+      <div id="barra-nivel-fill"></div>
+    </div>
+  </section>
+
+  <section class="card card-player">
+    <span class="card-eyebrow">Nuestra playlist</span>
+    <h2>Suena entre nosotros</h2>
+
+    <div class="player">
+      <div class="disco-wrap">
+        <div id="disco" class="disco">
+          <div class="disco-brillo"></div>
+        </div>
+        <canvas id="visualizador" width="220" height="80"></canvas>
+      </div>
+
+      <div class="player-info">
+        <p id="cancion-titulo">Elige una canción</p>
+        <p id="cancion-autor">—</p>
+      </div>
+
+      <div class="progreso-fila">
+        <span id="tiempo-actual">0:00</span>
+        <div class="progreso-barra" id="progreso-barra">
+          <div id="progreso-fill"></div>
+          <div id="progreso-handle"></div>
+        </div>
+        <span id="tiempo-total">0:00</span>
+      </div>
+
+      <div class="controles-fila">
+        <button id="btn-anterior" class="control-btn" aria-label="Anterior">⏮</button>
+        <button id="btn-play" class="control-btn control-btn-grande" aria-label="Reproducir">▶</button>
+        <button id="btn-siguiente" class="control-btn" aria-label="Siguiente">⏭</button>
+      </div>
+
+      <div class="volumen-fila">
+        <span aria-hidden="true">🔉</span>
+        <input type="range" id="volumen" min="0" max="100" value="70" aria-label="Volumen">
+      </div>
+
+      <ul id="lista-canciones" class="lista-canciones"></ul>
+    </div>
+  </section>
+
+  <nav class="nav-buttons">
+    <button id="btn-carta" class="menu-btn">💌 Carta</button>
+    <button id="btn-chat" class="menu-btn">💬 Chat</button>
+    <button id="btn-notas" class="menu-btn">📝 Notas</button>
+    <button id="btn-gustos" class="menu-btn">💗 Qué nos gusta</button>
+    <button id="btn-retos" class="menu-btn">🏆 100 Retos</button>
+    <button id="btn-album" class="menu-btn">📸 Álbum</button>
+    <button id="btn-linea" class="menu-btn">📖 Historia</button>
+    <button id="btn-logros" class="menu-btn">🎖️ Logros</button>
+    <button id="btn-morse" class="menu-btn">🔤 Morse</button>
+    <button id="btn-capsula" class="menu-btn">⏳ Cápsula del Tiempo</button>
+    <button id="btn-quiz" class="menu-btn">🧠 ¿Cuánto sabes de nosotros?</button>
+    <button id="btn-ruleta" class="menu-btn">🎡 Ruleta de Citas</button>
+    <button id="btn-frasco" class="menu-btn">🫙 Frasco de Piropos</button>
+    <button id="btn-animo" class="menu-btn">🌈 Estado de Ánimo</button>
+    <button id="btn-regalos" class="menu-btn oculto">🎁 Regalos</button>
+    <button id="btn-instalar" class="menu-btn oculto">📲 Instalar App</button>
+  </nav>
+
+  <footer class="app-footer">
+    <p>hecho con ❤️ para Scarleth Rassel</p>
+  </footer>
+</main>
+
+<!-- ============ MODALES ============ -->
+
+<div id="modal-carta" class="modal">
+  <div class="modal-content">
+    <button class="close" aria-label="Cerrar">✕</button>
+    <span class="card-eyebrow">Escrita solo para ti</span>
+    <h2>Para ti...</h2>
+    <p id="texto-maquina" class="maquina"></p>
+    <span id="cursor-maquina" class="cursor-maquina">|</span>
+  </div>
+</div>
+
+<div id="modal-chat" class="modal">
+  <div class="modal-content modal-ancho chat-modal-content">
+    <button class="close" aria-label="Cerrar">✕</button>
+    <span class="card-eyebrow">Solo entre nosotros dos</span>
+    <h2>Nuestro chat</h2>
+
+    <div id="chat-vinculacion" class="chat-vinculacion">
+      <p class="chat-ayuda">Conéctense con un código para empezar a chatear sin límite. Solo uno de los dos necesita crear el código; el otro lo usa para unirse.</p>
+
+      <div class="chat-nombre-fila">
+        <label for="chat-nombre-input">Tu nombre en el chat</label>
+        <input id="chat-nombre-input" type="text" maxlength="20" placeholder="Ej: Scarleth">
+      </div>
+
+      <div class="chat-vinculacion-opciones">
+        <div class="chat-opcion">
+          <h3>Crear un código nuevo</h3>
+          <button id="chat-crear" class="menu-btn" type="button">✨ Generar código</button>
+        </div>
+        <div class="chat-opcion">
+          <h3>Ya tengo un código</h3>
+          <div class="chat-unirse-fila">
+            <input id="chat-codigo-input" type="text" maxlength="6" placeholder="ABC123" autocapitalize="characters" autocomplete="off">
+            <button id="chat-unirse" class="menu-btn" type="button">Unirme</button>
+          </div>
+        </div>
+      </div>
+      <p id="chat-vinculacion-error" class="capsula-error" aria-live="polite"></p>
+    </div>
+
+    <div id="chat-activo" class="chat-activo" hidden>
+      <div class="chat-codigo-actual">
+        <span>Código: <strong id="chat-codigo-actual-valor"></strong></span>
+        <button id="chat-copiar-codigo" class="chat-mini-btn" type="button" title="Copiar código" aria-label="Copiar código">📋</button>
+        <button id="chat-desvincular" class="chat-mini-btn" type="button" title="Desvincular" aria-label="Desvincular">🔓</button>
+      </div>
+      <div id="chat-mensajes" class="chat-mensajes" aria-live="polite"></div>
+      <p id="chat-escribiendo" class="chat-escribiendo" aria-live="polite" hidden></p>
+      <form id="chat-form" class="chat-form">
+        <input id="chat-input" type="text" placeholder="Escribe un mensaje..." maxlength="500" autocomplete="off">
+        <button type="submit" class="chat-enviar-btn" aria-label="Enviar">➤</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div id="modal-notas" class="modal">
+  <div class="modal-content">
+    <button class="close" aria-label="Cerrar">✕</button>
+    <span class="card-eyebrow">Cosas que no queremos olvidar</span>
+    <h2>Nuestras notas</h2>
+
+    <form id="notas-form" class="notas-form">
+      <div class="notas-categorias" id="notas-categorias">
+        <button type="button" class="notas-chip activo" data-cat="pensamiento">💭 Pensamiento</button>
+        <button type="button" class="notas-chip" data-cat="cancion">🎵 Canción</button>
+        <button type="button" class="notas-chip" data-cat="pelicula">🎬 Película</button>
+        <button type="button" class="notas-chip" data-cat="otro">✨ Otro</button>
+      </div>
+      <textarea id="notas-texto" class="morse-entrada" rows="3" placeholder="Escribe algo que quieran guardar juntos..." maxlength="400"></textarea>
+      <p id="notas-error" class="capsula-error" aria-live="polite"></p>
+      <button type="submit" class="menu-btn" id="notas-guardar-btn">💾 Guardar nota</button>
+    </form>
+
+    <div id="notas-lista" class="notas-lista"></div>
+  </div>
+</div>
+
+<div id="modal-gustos" class="modal">
+  <div class="modal-content modal-ancho">
+    <button class="close" aria-label="Cerrar">✕</button>
+    <span class="card-eyebrow">Para conocernos cada vez mejor</span>
+    <h2>Qué le gusta a cada uno</h2>
+
+    <div class="gustos-columnas">
+      <div class="gustos-columna">
+        <h3>💗 A ella le gusta</h3>
+        <form class="gustos-form" data-quien="ella">
+          <input type="text" class="gustos-input" placeholder="Agregar algo..." maxlength="60">
+          <button type="submit" class="gustos-add-btn" aria-label="Agregar">➕</button>
+        </form>
+        <ul class="gustos-lista" id="gustos-lista-ella"></ul>
+      </div>
+
+      <div class="gustos-columna">
+        <h3>💙 A él le gusta</h3>
+        <form class="gustos-form" data-quien="el">
+          <input type="text" class="gustos-input" placeholder="Agregar algo..." maxlength="60">
+          <button type="submit" class="gustos-add-btn" aria-label="Agregar">➕</button>
+        </form>
+        <ul class="gustos-lista" id="gustos-lista-el"></ul>
+      </div>
+    </div>
+    <p class="gustos-ayuda">Toca cualquier elemento de la lista para editarlo.</p>
+  </div>
+</div>
+
+<div id="modal-retos" class="modal">
+  <div class="modal-content">
+    <button class="close" aria-label="Cerrar">✕</button>
+    <span class="card-eyebrow"><span id="retos-progreso"></span></span>
+    <h2>Nuestros 100 retos</h2>
+    <ul id="lista-retos" class="lista-retos"></ul>
+  </div>
+</div>
+
+<div id="modal-album" class="modal">
+  <div class="modal-content modal-ancho">
+    <button class="close" aria-label="Cerrar">✕</button>
+    <span class="card-eyebrow">Cada instante, guardado</span>
+    <h2>Nuestros recuerdos</h2>
+    <div class="album-grid" id="album-grid">
+      <div class="foto-placeholder" data-idx="0">📷 <span>Foto 1</span></div>
+      <div class="foto-placeholder" data-idx="1">📷 <span>Foto 2</span></div>
+      <div class="foto-placeholder" data-idx="2">📷 <span>Foto 3</span></div>
+      <div class="foto-placeholder" data-idx="3">📷 <span>Foto 4</span></div>
+    </div>
+    <p class="album-ayuda">Reemplaza estos bloques por tus fotos: agrega etiquetas &lt;img&gt; dentro de cada <code>.foto-placeholder</code> en index.html.</p>
+  </div>
+</div>
+
+<div id="modal-visor" class="modal modal-visor">
+  <button class="close close-visor" aria-label="Cerrar">✕</button>
+  <img id="visor-imagen" alt="Recuerdo ampliado">
+</div>
+
+<div id="modal-linea" class="modal">
+  <div class="modal-content">
+    <button class="close" aria-label="Cerrar">✕</button>
+    <span class="card-eyebrow">Nuestro recorrido</span>
+    <h2>Nuestra historia</h2>
+    <div class="timeline" id="timeline"></div>
+  </div>
+</div>
+
+<div id="modal-logros" class="modal">
+  <div class="modal-content modal-ancho">
+    <button class="close" aria-label="Cerrar">✕</button>
+    <span class="card-eyebrow"><span id="logros-progreso"></span></span>
+    <h2>Logros</h2>
+    <div class="logros-grid" id="logros-grid"></div>
+  </div>
+</div>
+
+<div id="modal-regalos" class="modal">
+  <div class="modal-content">
+    <button class="close" aria-label="Cerrar">✕</button>
+    <span class="card-eyebrow">Sorpresas desbloqueadas</span>
+    <h2>Regalos secretos</h2>
+    <div id="regalos-lista" class="regalos-lista"></div>
+  </div>
+</div>
+
+<div id="modal-luna" class="modal">
+  <div class="modal-content">
+    <button class="close" aria-label="Cerrar">✕</button>
+    <span class="card-eyebrow">🌙 Secretos de la luna</span>
+    <h2 id="luna-titulo">Sigue tocando...</h2>
+    <div id="luna-lista" class="luna-lista"></div>
+  </div>
+</div>
+
+<div id="modal-morse" class="modal">
+  <div class="modal-content">
+    <button class="close" aria-label="Cerrar">✕</button>
+    <span class="card-eyebrow">Nuestro código secreto</span>
+    <h2>Escritor en código morse</h2>
+
+    <div class="morse-modo">
+      <button id="morse-modo-texto" class="morse-modo-btn activo" type="button">Texto → Morse</button>
+      <button id="morse-modo-inverso" class="morse-modo-btn" type="button">Morse → Texto</button>
+    </div>
+
+    <textarea id="morse-entrada" class="morse-entrada" rows="2" placeholder="Escribe algo, por ejemplo TE AMO"></textarea>
+
+    <div class="morse-chips">
+      <button class="morse-chip" type="button" data-frase="TE AMO">TE AMO</button>
+      <button class="morse-chip" type="button" data-frase="SCARLETH">SCARLETH</button>
+      <button class="morse-chip" type="button" data-frase="ETERNO">ETERNO</button>
+    </div>
+
+    <div id="morse-salida" class="morse-salida" aria-live="polite"></div>
+
+    <div class="morse-controles">
+      <button id="morse-play" class="control-btn control-btn-grande" type="button" aria-label="Reproducir en morse">▶</button>
+      <div class="morse-luz" id="morse-luz"></div>
+    </div>
+    <p class="morse-ayuda">El punto de luz parpadea el mensaje: destello corto = punto, destello largo = raya.</p>
+  </div>
+</div>
+
+<div id="modal-capsula" class="modal">
+  <div class="modal-content">
+    <button class="close" aria-label="Cerrar">✕</button>
+    <span class="card-eyebrow">Para abrir en el futuro</span>
+    <h2>Cápsula del tiempo</h2>
+
+    <form id="capsula-form" class="capsula-form">
+      <textarea id="capsula-texto" class="morse-entrada" rows="3" placeholder="Escribe un mensaje para el futuro..." maxlength="600"></textarea>
+      <div class="capsula-form-fila">
+        <label for="capsula-fecha">Se abre el:</label>
+        <input type="date" id="capsula-fecha" required>
+      </div>
+      <p id="capsula-error" class="capsula-error" aria-live="polite"></p>
+      <button type="submit" class="menu-btn">🔒 Sellar cápsula</button>
+    </form>
+
+    <div id="capsulas-lista" class="capsulas-lista"></div>
+  </div>
+</div>
+
+<div id="modal-quiz" class="modal">
+  <div class="modal-content">
+    <button class="close" aria-label="Cerrar">✕</button>
+    <span class="card-eyebrow">Un juego para dos</span>
+    <h2>¿Cuánto sabes de nosotros?</h2>
+
+    <div id="quiz-contenedor" class="quiz-contenedor"></div>
+    <div id="quiz-resultado" class="quiz-resultado" hidden></div>
+  </div>
+</div>
+
+<div id="modal-ruleta" class="modal">
+  <div class="modal-content">
+    <button class="close" aria-label="Cerrar">✕</button>
+    <span class="card-eyebrow">Para cuando no sepan qué hacer</span>
+    <h2>Ruleta de citas</h2>
+
+    <div class="ruleta-tarjeta" id="ruleta-tarjeta">
+      <span class="ruleta-icono" id="ruleta-icono">🎲</span>
+      <p class="ruleta-texto" id="ruleta-texto">Toca girar para descubrir su próxima cita.</p>
+    </div>
+    <button id="ruleta-girar" class="menu-btn" type="button">🎡 Girar</button>
+    <p class="ruleta-ayuda">Combínenla con los 100 retos para no quedarse nunca sin planes.</p>
+  </div>
+</div>
+
+<div id="modal-instalar" class="modal">
+  <div class="modal-content">
+    <button class="close" aria-label="Cerrar">✕</button>
+    <span class="card-eyebrow">Para tenerla siempre a mano</span>
+    <h2>Instalar en tu iPhone</h2>
+    <ol class="instalar-pasos">
+      <li><span class="instalar-num">1</span> Toca el ícono compartir <span class="instalar-icono">⬆️</span> en la barra de Safari.</li>
+      <li><span class="instalar-num">2</span> Desliza hacia abajo y elige <strong>"Añadir a pantalla de inicio"</strong>.</li>
+      <li><span class="instalar-num">3</span> Toca <strong>"Añadir"</strong> arriba a la derecha.</li>
+    </ol>
+    <p class="instalar-nota">Listo — quedará como una app más en tu pantalla, con su propio ícono 💗</p>
+  </div>
+</div>
+
+<div id="modal-frasco" class="modal">
+  <div class="modal-content">
+    <button class="close" aria-label="Cerrar">✕</button>
+    <span class="card-eyebrow">Piropos guardados para después</span>
+    <h2>Frasco de piropos</h2>
+
+    <form id="frasco-form" class="frasco-form">
+      <textarea id="frasco-texto" class="morse-entrada" rows="2" maxlength="200" placeholder="Escribe un piropo o algo que agradeces hoy..."></textarea>
+      <button type="submit" class="menu-btn">🫙 Meter al frasco</button>
+    </form>
+
+    <p id="frasco-contador" class="frasco-contador"></p>
+
+    <div class="ruleta-tarjeta" id="frasco-tarjeta">
+      <span class="ruleta-icono" id="frasco-icono">🫙</span>
+      <p class="ruleta-texto" id="frasco-texto-sacado">El frasco está esperando su primer piropo.</p>
+    </div>
+    <div class="frasco-botones">
+      <button id="frasco-sacar" class="menu-btn" type="button">🎁 Sacar uno al azar</button>
+      <button id="frasco-vaciar" class="chat-btn-icono" type="button" title="Vaciar el frasco">🗑️</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-animo" class="modal">
+  <div class="modal-content">
+    <button class="close" aria-label="Cerrar">✕</button>
+    <span class="card-eyebrow">Un chequeo rápido, sin presión</span>
+    <h2>¿Cómo te sientes hoy?</h2>
+
+    <div id="animo-opciones" class="animo-opciones"></div>
+    <p id="animo-guardado" class="animo-guardado" hidden></p>
+
+    <div class="animo-historial">
+      <span class="card-eyebrow">Últimos 14 días</span>
+      <div id="animo-tira" class="animo-tira"></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/12.15.0/firebase-app-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/12.15.0/firebase-firestore-compat.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
